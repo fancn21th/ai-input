@@ -1,10 +1,11 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import content from "./content.txt?raw";
 
 const TiptapEditor = () => {
   const editor = useEditor({
     extensions: [StarterKit], // 使用 StarterKit 提供的扩展
-    content: "<p>Hello, Tiptap!</p>", // 初始内容
+    content, // 初始内容
     editorProps: {
       attributes: {
         class:
@@ -19,7 +20,7 @@ const TiptapEditor = () => {
 function App() {
   return (
     <div>
-      <h1>Tiptap 最简示例</h1>
+      <h1>Tiptap React 编辑器</h1>
       <hr />
       <TiptapEditor />
     </div>
