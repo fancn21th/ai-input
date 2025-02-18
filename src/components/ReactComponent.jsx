@@ -1,22 +1,15 @@
-import { NodeViewWrapper } from "@tiptap/react";
+import { NodeViewWrapper, NodeViewContent } from "@tiptap/react";
 import React from "react";
 
 export default (props) => {
-  const increase = () => {
-    props.updateAttributes({
-      count: props.node.attrs.count + 1,
-    });
-  };
-
   return (
-    <NodeViewWrapper className="react-component">
-      <label>React Component</label>
-
-      <div className="content">
-        <button onClick={increase}>
-          This button has been clicked {props.node.attrs.count} times.
-        </button>
-      </div>
+    <NodeViewWrapper className="react-component" as={"span"}>
+      <span
+        className="border border-t-0 border-x-0 border-b-green-600-200"
+        contentEditable={true}
+      >
+        Pls input something...
+      </span>
     </NodeViewWrapper>
   );
 };

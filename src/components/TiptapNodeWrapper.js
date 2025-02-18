@@ -6,16 +6,14 @@ import Component from "./ReactComponent.jsx";
 export default Node.create({
   name: "reactComponent",
 
-  group: "block",
+  group: "inline",
 
-  atom: true,
+  inline: true, // 行内元素
+
+  atom: true, // 表示该节点是原子节点，不能拆分
 
   addAttributes() {
-    return {
-      count: {
-        default: 0,
-      },
-    };
+    return {};
   },
 
   parseHTML() {

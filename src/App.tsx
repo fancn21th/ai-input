@@ -10,7 +10,7 @@ const TiptapEditor = () => {
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none",
+          "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 p-5 focus:outline-none border border-gray-300 rounded-md",
       },
     },
   });
