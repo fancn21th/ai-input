@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* placeholder */
+[data-empty-text-span]:empty::before {
+    content: attr(data-empty-text-span);
+    color: #c1c6d6;
+}
