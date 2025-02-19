@@ -13,7 +13,14 @@ export default Node.create({
   atom: true, // 表示该节点是原子节点，不能拆分
 
   addAttributes() {
-    return {};
+    return {
+      placeholder: {
+        default: "请输入内容...", // 占位符文本
+      },
+      text: {
+        default: "", // 文本内容
+      },
+    };
   },
 
   parseHTML() {

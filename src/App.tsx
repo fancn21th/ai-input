@@ -13,6 +13,10 @@ const TiptapEditor = () => {
           "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 p-5 focus:outline-none border border-gray-300 rounded-md",
       },
     },
+    onUpdate: ({ editor }) => {
+      const text = editor.getJSON(); // 获取当前 HTML 内容
+      console.log("Updated Content:", text);
+    },
   });
 
   return <EditorContent editor={editor} />;

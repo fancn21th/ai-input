@@ -1,3 +1,5 @@
 abc
 <react-component></react-component>
-efg
+def
+<react-component></react-component>
+ghi
