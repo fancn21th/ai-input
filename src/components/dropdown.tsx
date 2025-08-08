@@ -210,103 +210,54 @@ const DropdownComponent = ({ node, updateAttributes }: NodeViewProps) => {
 const DropdownExtension = Node.create({
   name: "dropdown",
 
-  // 定义节点属性
+  // 定义节点属性 - 简化版本，只关心数据结构
   addAttributes() {
     return {
       options: {
         default: ["选项1", "选项2", "选项3"],
-        parseHTML: (element) => {
-          const optionsAttr = element.getAttribute("data-options");
-          return optionsAttr
-            ? JSON.parse(optionsAttr)
-            : ["选项1", "选项2", "选项3"];
-        },
-        renderHTML: (attributes) => {
-          return {
-            "data-options": JSON.stringify(attributes.options),
-          };
-        },
       },
       selectedValue: {
         default: "",
-        parseHTML: (element) => element.getAttribute("data-selected") || "",
-        renderHTML: (attributes) => {
-          return {
-            "data-selected": attributes.selectedValue,
-          };
-        },
       },
       placeholder: {
         default: "请选择...",
-        parseHTML: (element) =>
-          element.getAttribute("data-placeholder") || "请选择...",
-        renderHTML: (attributes) => {
-          return {
-            "data-placeholder": attributes.placeholder,
-          };
-        },
       },
     };
   },
 
-  // HTML 解析 - 支持从 HTML 完整恢复数据
-  parseHTML() {
-    return [
-      {
-        tag: 'div[data-type="dropdown"]',
-        getAttrs: (element) => {
-          // 优先从完整状态数据恢复
-          const dropdownState = element.getAttribute("data-dropdown-state");
-          if (dropdownState) {
-            try {
-              const state = JSON.parse(dropdownState);
-              return {
-                options: state.options || ["选项1", "选项2", "选项3"],
-                selectedValue: state.selectedValue || "",
-                placeholder: state.placeholder || "请选择...",
-              };
-            } catch (e) {
-              console.warn("Failed to parse dropdown state:", e);
-            }
-          }
+  // HTML 解析 - 极简版本，只需要识别标签
+  // parseHTML() {
+  //   return [
+  //     {
+  //       tag: 'div[data-type="dropdown"]',
+  //       getAttrs: (element) => {
+  //         // 直接从完整状态数据恢复
+  //         const dropdownState = element.getAttribute("data-dropdown-state");
+  //         if (dropdownState) {
+  //           try {
+  //             return JSON.parse(dropdownState);
+  //           } catch (e) {
+  //             console.warn("Failed to parse dropdown state:", e);
+  //           }
+  //         }
+  //         // 如果没有状态数据，使用默认值
+  //         return {};
+  //       },
+  //     },
+  //   ];
+  // },
 
-          // 兼容旧格式：从单独的属性恢复
-          const optionsAttr = element.getAttribute("data-options");
-          const selectedAttr = element.getAttribute("data-selected");
-          const placeholderAttr = element.getAttribute("data-placeholder");
-
-          return {
-            options: optionsAttr
-              ? JSON.parse(optionsAttr)
-              : ["选项1", "选项2", "选项3"],
-            selectedValue: selectedAttr || "",
-            placeholder: placeholderAttr || "请选择...",
-          };
-        },
-      },
-    ];
-  },
-
-  // HTML 渲染 - 完整保存数据用于持久化
-  renderHTML({ node, HTMLAttributes }) {
-    return [
-      "div",
-      {
-        "data-type": "dropdown",
-        "data-options": JSON.stringify(node.attrs.options),
-        "data-selected": node.attrs.selectedValue,
-        "data-placeholder": node.attrs.placeholder,
-        "data-dropdown-state": JSON.stringify({
-          options: node.attrs.options,
-          selectedValue: node.attrs.selectedValue,
-          placeholder: node.attrs.placeholder,
-          timestamp: Date.now(), // 添加时间戳用于调试
-        }),
-        ...HTMLAttributes,
-      },
-      `下拉菜单: ${node.attrs.selectedValue || "未选择"}`,
-    ];
-  },
+  // // HTML 渲染 - 极简版本，只需要保存数据
+  // renderHTML({ node }) {
+  //   return [
+  //     "div",
+  //     {
+  //       "data-type": "dropdown",
+  //       "data-dropdown-state": JSON.stringify(node.attrs),
+  //     },
+  //     `[下拉菜单: ${node.attrs.selectedValue || "未选择"}]`,
+  //   ];
+  // },
 
   // 使用 React NodeView
   addNodeView() {

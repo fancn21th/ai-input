@@ -56,16 +56,74 @@ const TiptapEditor = () => {
     }
   };
 
-  // 导出数据
+  // 导出完整编辑器数据为 JSON 文件
   const exportData = () => {
-    const data = PersistenceManager.exportData();
-    const blob = new Blob([data], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `tiptap-data-${new Date().getTime()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    if (editor) {
+      const editorJSON = editor.getJSON(); // 获取完整编辑器 JSON
+      const exportData = {
+        version: "1.0",
+        timestamp: new Date().toISOString(),
+        content: editorJSON,
+      };
+
+      const jsonString = JSON.stringify(exportData, null, 2);
+      const blob = new Blob([jsonString], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `tiptap-editor-${new Date().getTime()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      console.log("📤 导出的编辑器数据:", exportData);
+      alert("编辑器内容已导出为 JSON 文件！");
+    }
+  };
+
+  // 从 JSON 文件导入并恢复编辑器内容
+  const importFromFile = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const jsonString = e.target?.result as string;
+            const importData = JSON.parse(jsonString);
+
+            console.log("� 导入的数据:", importData);
+
+            // 验证数据格式
+            if (importData.content && typeof importData.content === "object") {
+              if (editor) {
+                // 清空当前内容
+                editor.commands.clearContent();
+
+                // 恢复导入的内容
+                editor.commands.setContent(importData.content);
+
+                console.log("✅ 内容已从文件恢复到编辑器");
+                alert(
+                  `内容已从文件恢复！\n导出时间: ${
+                    importData.timestamp || "未知"
+                  }`
+                );
+              }
+            } else {
+              throw new Error("无效的文件格式");
+            }
+          } catch (error) {
+            console.error("❌ 导入失败:", error);
+            alert("导入失败：文件格式不正确或已损坏");
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
   };
 
   // 显示当前数据状态
@@ -81,6 +139,30 @@ const TiptapEditor = () => {
     }
   };
 
+  // 测试导出导入流程
+  const testExportImport = () => {
+    if (editor) {
+      const currentJSON = editor.getJSON();
+      console.log("🧪 当前编辑器内容:", currentJSON);
+
+      // 模拟导出导入流程
+      const exportData = {
+        version: "1.0",
+        timestamp: new Date().toISOString(),
+        content: currentJSON,
+      };
+
+      // 清空编辑器
+      editor.commands.clearContent();
+
+      // 立即恢复
+      setTimeout(() => {
+        editor.commands.setContent(exportData.content);
+        console.log("✅ 测试完成：内容已恢复");
+        alert("测试完成！编辑器内容已清空后恢复");
+      }, 500);
+    }
+  };
   return (
     <div>
       {/* 操作按钮栏 */}
@@ -124,6 +206,20 @@ const TiptapEditor = () => {
         </button>
 
         <button
+          onClick={testExportImport}
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#6f42c1",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          🧪 测试导入导出
+        </button>
+
+        <button
           onClick={exportData}
           style={{
             padding: "8px 16px",
@@ -135,6 +231,20 @@ const TiptapEditor = () => {
           }}
         >
           💾 导出数据
+        </button>
+
+        <button
+          onClick={importFromFile}
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#fd7e14",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          � 从文件导入
         </button>
 
         <button
