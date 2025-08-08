@@ -1,0 +1,5 @@
+abc
+<react-component></react-component>
+def
+<react-component></react-component>
+ghi

@@ -15,6 +15,20 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    /* Path mapping for Tiptap source debugging */
+    "baseUrl": ".",
+    "paths": {
+      "@tiptap/core": ["../tiptap/packages/core/src"],
+      "@tiptap/core/*": ["../tiptap/packages/core/src/*"],
+      "@tiptap/react": ["../tiptap/packages/react/src"],
+      "@tiptap/react/*": ["../tiptap/packages/react/src/*"],
+      "@tiptap/starter-kit": ["../tiptap/packages/starter-kit/src"],
+      "@tiptap/starter-kit/*": ["../tiptap/packages/starter-kit/src/*"],
+      "@tiptap/extension-*": ["../tiptap/packages/extension-*/src"],
+      "@tiptap/pm": ["../tiptap/packages/pm/src"],
+      "@tiptap/pm/*": ["../tiptap/packages/pm/*"]
+    },
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
